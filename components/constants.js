@@ -7,12 +7,6 @@ export const colors = {
   secondary: "#D2D36A",
 };
 
-export const colorsToEmoji = {
-  [colors.darkgrey]: "⬛",
-  [colors.primary]: "🟩",
-  [colors.secondary]: "🟧",
-};
-
 export const ENTER = "ENTER";
 export const CLEAR = "CLEAR";
 
