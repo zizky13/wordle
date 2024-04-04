@@ -1,22 +1,45 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, SafeAreaView, ScrollView } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ENTER, CLEAR, colors } from "./components/constants";
 import Keyboard from "./components/Keyboard";
 
-/**
- * Main component for the Wordle app.
- *
- * @returns {JSX.Element} The rendered component.
- */
+
+// Todo:
+// - Save current progress in AsyncStorage or backend stuff
+// - keep track of stats such as (number of games played, win rate, current streak, longest streak, etc)
+// - Add a timer to track the time taken to solve the word
+// - Add reset button to reset the game, or implement reset login when number is guessed corretcly or user lost
 
 const tries = 6;
 const copyArray = (arr) => {
   return [...arr.map((rows) => [...rows])]; //creates a deep copy of the array bcs we need to update the rows state
 };
 
+const words = [
+  "hello",
+  "world",
+  "apple",
+  "banana",
+  "orange",
+  "grape",
+  "kiwi",
+  "mango",
+  "pear",
+  "peach",
+  "plum",
+  "strawberry",
+  "blueberry",
+  "raspberry",
+  "blackberry",
+  "watermelon",
+  "cantaloupe",
+];
+
+const wordsIndex = Math.round(Math.random() * words.length);
+
 export default function App() {
-  const word = "hello";
+  const word = words[wordsIndex];
   const letters = word.split(""); //splits to ['h', 'e', 'l', 'l', 'o']
   const [rows, setRows] = useState(
     new Array(tries).fill(new Array(letters.length).fill(""))
@@ -24,11 +47,44 @@ export default function App() {
 
   const [currentRow, setCurrentRow] = useState(0); //creates a state to track current pointed row
   const [currentCol, setCurrentCol] = useState(0); //creates a state to track current pointed column
-  const greenCaps = [];
-  const yellowCaps = [];
-  const greyCaps = [];
+  const [gameState, setGameState] = useState("playing"); //creates a state to track the game state [playing, won, lost
+
+  const greenCaps = []; //to track the words need to be turned to green
+  const yellowCaps = []; //to track the words need to be turned to yellow
+  const greyCaps = []; //to track the words need to be turned to grey
+
+  useEffect(() => {
+    if (currentRow >= 0) {
+      checkGameState();
+    }
+  }, [currentRow]);
+
+  const checkGameState = () => {
+    if (checkIfWon()) {
+      alert("You won!");
+      setGameState("won");
+    } else if (checkIfLost()) {
+      alert("You lost!");
+      setGameState("lost");
+    }
+  };
+
+  const checkIfWon = () => {
+    const row = rows[currentRow - 1];
+    return row && row.every((cell, i) => cell === letters[i]);
+  };
+
+  const checkIfLost = () => {
+    if (currentRow === tries) {
+      alert("You lost!");
+    }
+  };
 
   const onKeyPressed = (key) => {
+    if (gameState !== "playing") {
+      return;
+    }
+
     const updatedRows = copyArray(rows); //creates a deep copy of the rows state
 
     if (key === CLEAR) {
