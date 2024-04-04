@@ -24,22 +24,32 @@ export default function App() {
 
   const [currentRow, setCurrentRow] = useState(0); //creates a state to track current pointed row
   const [currentCol, setCurrentCol] = useState(0); //creates a state to track current pointed column
+  const greenCaps = [];
+  const yellowCaps = [];
+  const greyCaps = [];
 
   const onKeyPressed = (key) => {
     const updatedRows = copyArray(rows); //creates a deep copy of the rows state
-    
-    if (key === CLEAR){
+
+    if (key === CLEAR) {
       const previousColumn = currentCol - 1;
       if (previousColumn >= 0) {
         updatedRows[currentRow][previousColumn] = "";
         setRows(updatedRows);
         setCurrentCol(previousColumn);
       }
-      
       return;
     }
 
-    if(currentCol < rows[0].length) {
+    if (key === ENTER) {
+      if (currentCol === rows[0].length) {
+        setCurrentRow(currentRow + 1);
+        setCurrentCol(0);
+      }
+      return;
+    }
+
+    if (currentCol < rows[0].length) {
       updatedRows[currentRow][currentCol] = key;
       setRows(updatedRows);
       setCurrentCol(currentCol + 1);
@@ -48,6 +58,23 @@ export default function App() {
 
   const isCellActive = (row, col) => {
     return row === currentRow && col === currentCol;
+  };
+
+  const getCellBGColor = (cell, row, col) => {
+    if (row >= currentRow) {
+      return colors.black;
+    }
+
+    if (cell === letters[col]) {
+      greenCaps.push(cell);
+      return colors.primary;
+    }
+    if (letters.includes(cell)) {
+      yellowCaps.push(cell);
+      return colors.secondary;
+    }
+    greyCaps.push(cell);
+    return colors.darkgrey;
   };
 
   return (
@@ -66,6 +93,7 @@ export default function App() {
                     borderColor: isCellActive(i, j)
                       ? colors.grey
                       : colors.darkgrey,
+                    backgroundColor: getCellBGColor(cell, i, j),
                   },
                 ]}
               >
@@ -76,7 +104,12 @@ export default function App() {
         ))}
       </ScrollView>
 
-      <Keyboard onKeyPressed={onKeyPressed} />
+      <Keyboard
+        onKeyPressed={onKeyPressed}
+        greenCaps={greenCaps}
+        yellowCaps={yellowCaps}
+        greyCaps={greyCaps}
+      />
     </SafeAreaView>
   );
 }

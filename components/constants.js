@@ -3,8 +3,8 @@ export const colors = {
   darkgrey: "#3A3A3D",
   grey: "#818384",
   lightgrey: "#D7DADC",
-  primary: "#434C5E",
-  secondary: "#3B4252",
+  primary: "#116611",
+  secondary: "#D2D36A",
 };
 
 export const colorsToEmoji = {
