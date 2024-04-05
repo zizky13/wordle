@@ -1,8 +1,10 @@
 import { View, Text, StyleSheet } from "react-native";
 import { colors } from "../components/constants";
+import { fetchScore } from "../util/http";
 
 export default ResultScreen = ({ route }) => {
   const { correctWord, guessCount, condition } = route.params;
+  
 
   return (
     <View style={styles.container}>

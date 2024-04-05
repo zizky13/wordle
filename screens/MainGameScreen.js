@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, SafeAreaView, ScrollView } from "react-native";
 import { useEffect, useState } from "react";
 import { ENTER, CLEAR, colors } from "../components/constants";
 import Keyboard from "../components/Keyboard/Keyboard";
+import { storeScore } from "../util/http";
 
 const tries = 6;
 const copyArray = (arr) => {
@@ -48,6 +49,7 @@ export default MainGameScreen = ({ navigation }) => {
   const checkGameState = () => {
     if (checkIfWon()) {
       setGameState("won");
+      storeScore({ guessCount: numberOfGuesses });
       navigation.navigate("ResultScreen", { condition: 'won!', correctWord: word, guessCount: numberOfGuesses });
     } else if (checkIfLost()) {
       setGameState("lost");
