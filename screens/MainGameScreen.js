@@ -37,6 +37,9 @@ export default MainGameScreen = ({ navigation }) => {
     }
   }, [currentRow]);
 
+
+
+
   const checkIfWon = () => {
     const row = rows[currentRow - 1];
     return row && row.every((cell, i) => cell === letters[i]);
@@ -50,10 +53,10 @@ export default MainGameScreen = ({ navigation }) => {
     if (checkIfWon()) {
       setGameState("won");
       storeScore({ guessCount: numberOfGuesses });
-      navigation.navigate("ResultScreen", { condition: 'won!', correctWord: word, guessCount: numberOfGuesses });
+      navigation.navigate("ResultScreen", { condition: 'won!', correctWord: word, guessCount: numberOfGuesses, reset: reset});
     } else if (checkIfLost()) {
       setGameState("lost");
-      navigation.navigate("ResultScreen", { condition: 'lost!', correctWord: word, guessCount: numberOfGuesses });
+      navigation.navigate("ResultScreen", { condition: 'lost!', correctWord: word, guessCount: numberOfGuesses, reset: reset});
     }
   };
 
@@ -106,6 +109,18 @@ export default MainGameScreen = ({ navigation }) => {
     greyCaps.push(cell);
     return colors.darkgrey;
   };
+
+  const reset = () => {
+    setRows(new Array(tries).fill(new Array(letters.length).fill("")));
+    setCurrentRow(0);
+    setCurrentCol(0);
+    setGameState("playing");
+    setNumberOfGuesses(0);
+    greenCaps.length = 0;
+    yellowCaps.length = 0;
+    greyCaps.length = 0;
+  }
+
 
   return (
     <SafeAreaView style={styles.container}>

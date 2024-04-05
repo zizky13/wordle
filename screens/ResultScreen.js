@@ -1,9 +1,14 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Button } from "react-native";
 import { colors } from "../components/constants";
 import { fetchScore } from "../util/http";
 
-export default ResultScreen = ({ route }) => {
-  const { correctWord, guessCount, condition } = route.params;
+export default ResultScreen = ({ route, navigation }) => {
+  const { correctWord, guessCount, condition, reset } = route.params;
+
+  const playAgain = () => {
+    reset();
+    navigation.navigate("MainGameScreen");
+  };
   
 
   return (
@@ -20,6 +25,7 @@ export default ResultScreen = ({ route }) => {
       </Text>
       <Text style={styles.subtitle}>The word was {correctWord}</Text>
       <Text style={styles.subtitle}>Number of guesses: {guessCount}</Text>
+      <Button title="Play Again" onPress={playAgain} />
     </View>
   );
 };

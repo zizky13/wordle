@@ -4,7 +4,7 @@ const BACKEND_URL = 'https://skilful-rain-409314-default-rtdb.asia-southeast1.fi
  
 
 export function storeScore(score) {
-  if (fetchScore() > score.guessCount) {
+  if (fetchScore() < score.guessCount) {
     return;
   }
 
