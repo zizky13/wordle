@@ -37,6 +37,12 @@ export default MainGameScreen = ({ navigation }) => {
     }
   }, [currentRow]);
 
+  useEffect(() => {
+    if (gameState === "won" || gameState === "lost") {
+      reset();
+    }
+  }, [gameState]);
+
 
 
 
@@ -53,10 +59,10 @@ export default MainGameScreen = ({ navigation }) => {
     if (checkIfWon()) {
       setGameState("won");
       storeScore({ guessCount: numberOfGuesses });
-      navigation.navigate("ResultScreen", { condition: 'won!', correctWord: word, guessCount: numberOfGuesses, reset: reset});
+      navigation.navigate("ResultScreen", { condition: 'won!', correctWord: word, guessCount: numberOfGuesses});
     } else if (checkIfLost()) {
       setGameState("lost");
-      navigation.navigate("ResultScreen", { condition: 'lost!', correctWord: word, guessCount: numberOfGuesses, reset: reset});
+      navigation.navigate("ResultScreen", { condition: 'lost!', correctWord: word, guessCount: numberOfGuesses});
     }
   };
 

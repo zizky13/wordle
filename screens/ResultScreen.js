@@ -1,12 +1,12 @@
 import { View, Text, StyleSheet, Button } from "react-native";
 import { colors } from "../components/constants";
 import { fetchScore } from "../util/http";
+import { LogBox } from "react-native";
 
 export default ResultScreen = ({ route, navigation }) => {
-  const { correctWord, guessCount, condition, reset } = route.params;
+  const { correctWord, guessCount, condition } = route.params;
 
   const playAgain = () => {
-    reset();
     navigation.navigate("MainGameScreen");
   };
   
